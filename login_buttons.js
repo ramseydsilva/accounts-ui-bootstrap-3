@@ -99,6 +99,10 @@
 
     if (user.profile && user.profile.name)
       return user.profile.name;
+    if (user.profile && user.profile.firstName && user.profile.lastName)
+        return user.profile.firstName + " " + user.profile.lastName;
+    if (user.profile && user.profile.firstName)
+        return user.profile.firstName;
     if (user.username)
       return user.username;
     if (user.emails && user.emails[0] && user.emails[0].address)
