@@ -75,15 +75,9 @@
     {{#each fields}}
       {{> _loginButtonsFormField}}
     {{/each}}
-      {{#if inSignupFlow}}
         <button class="btn btn-primary col-sm-12" id="login-buttons-password" type="button">
-            Create
+            {{#if inSignupFlow}}Register{{else}}Sign in{{/if }}
         </button>
-      {{else}}
-        <button class="btn btn-primary col-sm-12" id="login-buttons-password" type="button">
-            Sign in
-        </button>
-      {{/if}}
     {{#if inLoginFlow}}
       <div id="login-other-options">
       {{#if showForgotPasswordLink}}
