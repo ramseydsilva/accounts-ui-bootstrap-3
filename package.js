@@ -3,7 +3,7 @@ Package.describe({
 });
 
 Package.on_use(function (api) {
-  api.use(['session', 'handlebars', 'accounts-password', 'accounts-facebook', 'accounts-google', 'stylus', 'accounts-base', 'underscore', 'templating'], 'client');
+  api.use(['session', 'handlebars', 'accounts-password', 'accounts-facebook', 'stylus', 'accounts-base', 'underscore', 'templating'], 'client');
 
   api.add_files([
     'accounts_ui.js',
