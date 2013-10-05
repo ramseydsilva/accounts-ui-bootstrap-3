@@ -34,7 +34,9 @@
     },
 
     'click #login-buttons-set-password-button': function(event) {
-        loginButtonsSession.set('resetPasswordToken', "nopasswordset");
+        if (Meteor.userId()) {
+            loginButtonsSession.set('resetPasswordToken', Meteor.user().services.password.reset.token);
+        }
     }
   });
 
@@ -58,8 +60,9 @@
       // If user has no password set, then the reset when date is set to a blank string
       // as an indicator to show set password without having to send the whole password service
       // reset token down the wire. This is done when user is initially created
-      if (user.services.password && user.services.password.reset && user.services.password.reset.when == "") {
-          return false;
+      if (user.services.password && user.services.password.reset) {
+          if (user.services.password.reset.token.indexOf("nopasswordset") != -1)
+            return false;
       }
       return true;
   };
