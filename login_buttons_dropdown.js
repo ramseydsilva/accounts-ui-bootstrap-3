@@ -31,6 +31,10 @@
       loginButtonsSession.set('inChangePasswordFlow', true);
       Meteor.flush();
       toggleDropdown();
+    },
+
+    'click #login-buttons-set-password-button': function(event) {
+        loginButtonsSession.set('resetPasswordToken', "nopasswordset");
     }
   });
 
@@ -50,16 +54,26 @@
     return loginButtonsSession.get('dropdownVisible');
   };
 
-  Template._loginButtonsLoggedInDropdownActions.allowChangingPassword = function () {
-    // it would be more correct to check whether the user has a password set,
-    // but in order to do that we'd have to send more data down to the client,
-    // and it'd be preferable not to send down the entire service.password document.
-    //
-    // instead we use the heuristic: if the user has a username or email set.
-    var user = Meteor.user();
-    return user.username || (user.emails && user.emails[0] && user.emails[0].address);
+  var has_password = function(user) {
+      // If user has no password set, then the reset when date is set to a blank string
+      // as an indicator to show set password without having to send the whole password service
+      // reset token down the wire. This is done when user is initially created
+      if (user.services.password && user.services.password.reset && user.services.password.reset.when == "") {
+          return false;
+      }
+      return true;
   };
 
+  Template._loginButtonsLoggedInDropdownActions.allowChangingPassword = function () {
+    var user = Meteor.user();
+    return user.username || (user.emails && user.emails[0] && user.emails[0].address && has_password(user));
+  };
+
+  Template._loginButtonsLoggedInDropdownActions.allowSettingPassword = function() {
+      // user.services.password.email will contain a value if no password has been set.
+      var user = Meteor.user();
+      return user.username || (user.emails && user.emails[0] && user.emails[0].address && !has_password(user));
+  };
 
   //
   // loginButtonsLoggedOutDropdown template and related
